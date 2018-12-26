@@ -28,7 +28,7 @@ public class BancoDAO {
 	
 	public void setConta(Conta conta) throws IOException {
 		PrintStream ps = new PrintStream(new FileOutputStream(new File("bytebank.csv"), true), true, "UTF-8");
-
+	
 		ps.println(String.format(new Locale("pt", "BR"), "%s,%04d,%04d,%s,%s,%s,%08.2f",
 				conta.typeAccount(), conta.getAgencia(), conta.getNumero(), 
 				conta.getTitular().getNome(), conta.getTitular().getCpf(), conta.getTitular().getProfissao(),
@@ -59,6 +59,7 @@ public class BancoDAO {
 			
 			scanner.useDelimiter(",");
 			scanner.useLocale(Locale.US);
+			
 			String typeAccount = scanner.next();
 			int agencia = scanner.nextInt();
 			int numero = scanner.nextInt();
@@ -66,6 +67,7 @@ public class BancoDAO {
 			String cpf = scanner.next();
 			String profissao = scanner.next();
 			double saldo = scanner.nextDouble();
+			
 			Conta cc = instanceOfAccount(typeAccount, agencia, numero);
 			cc.setTitular(new Cliente(nomeTitular, cpf, profissao));
 			cc.deposita(saldo);
@@ -88,6 +90,7 @@ public class BancoDAO {
 			
 			scanner.useDelimiter(",");
 			scanner.useLocale(Locale.US);
+			
 			String typeAccount = scanner.next();
 			int agencia = scanner.nextInt();
 			int numero = scanner.nextInt();
@@ -95,6 +98,7 @@ public class BancoDAO {
 			String cpf = scanner.next();
 			String profissao = scanner.next();
 			double saldo = scanner.nextDouble();
+			
 			Conta cc = instanceOfAccount(typeAccount, agencia, numero);
 			scanner.close();
 			if(equalAccount(c, cc)) {
@@ -116,6 +120,7 @@ public class BancoDAO {
 		if(contas.size() >= 1) {
 			
 			for(Conta account : contas) {
+				
 				if(account.equals(conta)) 
 					return true;
 			}

@@ -21,7 +21,7 @@ public class TesteString {
 		
 		System.out.println(nome.length());
 		System.out.println("---------------");
-		System.out.println(nome.matches("elvis"));
+		System.out.println(nome.matches("alura"));
 		System.out.println("---------------");
 		System.out.println(nome.indexOf("ra"));
 		System.out.println(nome);
