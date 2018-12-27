@@ -189,7 +189,7 @@ public abstract class Conta implements Comparable<Conta>, java.io.Serializable {
     @Override
     public boolean equals(Object o) {
     	if(o == null)
-    		return false;
+    		throw new NullPointerException("Conta não foi cadastrada!");
     	
     	if(!(o instanceof Conta))
     		return false;

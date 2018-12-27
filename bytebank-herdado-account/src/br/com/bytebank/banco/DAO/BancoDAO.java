@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -16,7 +17,7 @@ import br.com.bytebank.banco.modelo.ContaCorrente;
 import br.com.bytebank.banco.modelo.ContaPoupanca;
 
 public class BancoDAO {
-	List<Conta> contas;
+	private List<Conta> contas;
 //	Os arquivos Comma-separated values, também conhecido como CSV, são arquivos de texto 
 //	de formato regulamentado pelo RFC 4180, que faz uma ordenação de bytes ou um formato de 
 //	terminador de linha, separando valores com vírgulas.[1] Ele comumente é usado em softwares offices, 
@@ -27,7 +28,7 @@ public class BancoDAO {
 	}
 	
 	public void setConta(Conta conta) throws IOException {
-		PrintStream ps = new PrintStream(new FileOutputStream(new File("bytebank.csv"), true), true, "UTF-8");
+		PrintStream ps = new PrintStream(new FileOutputStream(Paths.get("bytebank.csv").toFile(), true), true, "UTF-8");
 	
 		ps.println(String.format(new Locale("pt", "BR"), "%s,%04d,%04d,%s,%s,%s,%08.2f",
 				conta.typeAccount(), conta.getAgencia(), conta.getNumero(), 
@@ -36,7 +37,7 @@ public class BancoDAO {
 		ps.close();
 	}
 	
-	public void setConta(List<? extends Conta> contas) throws IOException {
+	public void setContas(List<? extends Conta> contas) throws IOException {
 		PrintStream ps = new PrintStream(new FileOutputStream(new File("bytebank.csv"), true), true, "UTF-8");
 		
 		for(Conta conta : contas) {
@@ -54,7 +55,7 @@ public class BancoDAO {
 		
 		while(scan.hasNextLine()) {
 			String linha = scan.nextLine();
-			
+		
 			Scanner scanner = new Scanner(linha);
 			
 			scanner.useDelimiter(",");

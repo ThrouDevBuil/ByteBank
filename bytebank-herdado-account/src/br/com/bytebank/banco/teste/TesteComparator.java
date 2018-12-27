@@ -122,7 +122,7 @@ public class TesteComparator {
         //Após a seta (sintaxe de uma lambda) tem o código associado a entrada
         
         
-        Iterator<Conta> it = lista.iterator();
+        Iterator<? extends Conta> it = lista.iterator();
         
         System.out.println("\nIterator\n");
         while(it.hasNext()) {

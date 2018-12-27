@@ -51,7 +51,7 @@ public class TesteSaca {
 //		
 //		if(cc != null)
 //			System.out.println(cc);
-		dao.setConta(contas);
+		dao.setContas(contas);
 //		
 //		
 	}

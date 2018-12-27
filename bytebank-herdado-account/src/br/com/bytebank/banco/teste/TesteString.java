@@ -14,7 +14,7 @@ public class TesteString {
 		//da string
 		nome = nome.trim();
 		//Qualquer método da classe String devolve uma nova String que representa
-		//a alteração
+		//a alteração.
 		//A classe String é uma CharSequence
 		//Se for necessário concatenar muitos String utilizasse a classe StringBuilder
 		

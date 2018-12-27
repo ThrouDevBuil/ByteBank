@@ -72,8 +72,8 @@ public class TestePersistencia {
 
 	@SuppressWarnings("unchecked")
 	private static ArrayList<? extends Conta> cast(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-		if(ois != null)
-			return (ArrayList<? extends Conta>) ois.readObject();
-		return null;
+		if(ois == null)
+			throw new NullPointerException("Nenhum objeto foi serializado!");
+		return (ArrayList<? extends Conta>) ois.readObject();
 	}
 }
