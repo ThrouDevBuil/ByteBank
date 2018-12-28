@@ -2,10 +2,11 @@ package br.com.bytebank.banco.DAO;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.file.Paths;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -13,8 +14,6 @@ import java.util.Scanner;
 
 import br.com.bytebank.banco.modelo.Cliente;
 import br.com.bytebank.banco.modelo.Conta;
-import br.com.bytebank.banco.modelo.ContaCorrente;
-import br.com.bytebank.banco.modelo.ContaPoupanca;
 
 public class BancoDAO {
 	private List<Conta> contas;
@@ -28,8 +27,12 @@ public class BancoDAO {
 	}
 	
 	public void setConta(Conta conta) throws IOException {
-		PrintStream ps = new PrintStream(new FileOutputStream(Paths.get("bytebank.csv").toFile(), true), true, "UTF-8");
+		writeFile(conta);
+	}
 	
+	private void writeFile(Conta conta) throws UnsupportedEncodingException, FileNotFoundException {
+		PrintStream ps = new PrintStream(new FileOutputStream(new File("bytebank.csv"), true), true, "UTF-8");
+		
 		ps.println(String.format(new Locale("pt", "BR"), "%s,%04d,%04d,%s,%s,%s,%08.2f",
 				conta.typeAccount(), conta.getAgencia(), conta.getNumero(), 
 				conta.getTitular().getNome(), conta.getTitular().getCpf(), conta.getTitular().getProfissao(),
@@ -38,15 +41,30 @@ public class BancoDAO {
 	}
 	
 	public void setContas(List<? extends Conta> contas) throws IOException {
-		PrintStream ps = new PrintStream(new FileOutputStream(new File("bytebank.csv"), true), true, "UTF-8");
+		for(Conta conta : contas)
+			writeFile(conta);
+	}
+	
+	public Conta scan(String linha) {
+		Scanner scanner = new Scanner(linha);
 		
-		for(Conta conta : contas) {
-			ps.println(String.format(new Locale("pt", "BR"), "%s,%04d,%04d,%s,%s,%s,%08.2f",
-					conta.typeAccount(), conta.getAgencia(), conta.getNumero(), 
-					conta.getTitular().getNome(), conta.getTitular().getCpf(), conta.getTitular().getProfissao(),
-					conta.getSaldo()));
-		}
-		ps.close();
+		scanner.useDelimiter(",");
+		scanner.useLocale(Locale.US);
+		
+		String typeAccount = scanner.next();
+		int agencia = scanner.nextInt();
+		int numero = scanner.nextInt();
+		String nomeTitular = scanner.next();
+		String cpf = scanner.next();
+		String profissao = scanner.next();
+		double saldo = scanner.nextDouble();
+		
+		Conta cc = instanceOfAccount(typeAccount, agencia, numero);
+		cc.setTitular(new Cliente(nomeTitular, cpf, profissao));
+		cc.deposita(saldo);
+		
+		scanner.close();
+		return cc;
 	}
 	
 	public List<? extends Conta> getContas() throws IOException {
@@ -55,26 +73,9 @@ public class BancoDAO {
 		
 		while(scan.hasNextLine()) {
 			String linha = scan.nextLine();
-		
-			Scanner scanner = new Scanner(linha);
-			
-			scanner.useDelimiter(",");
-			scanner.useLocale(Locale.US);
-			
-			String typeAccount = scanner.next();
-			int agencia = scanner.nextInt();
-			int numero = scanner.nextInt();
-			String nomeTitular = scanner.next();
-			String cpf = scanner.next();
-			String profissao = scanner.next();
-			double saldo = scanner.nextDouble();
-			
-			Conta cc = instanceOfAccount(typeAccount, agencia, numero);
-			cc.setTitular(new Cliente(nomeTitular, cpf, profissao));
-			cc.deposita(saldo);
+			Conta cc = scan(linha);
 			if(!compareAccount(cc))
 				contas.add(cc);
-			scanner.close();
 		}
 		scan.close();
 		return (ArrayList<? extends Conta>) contas;
@@ -86,25 +87,8 @@ public class BancoDAO {
 		
 		while(scan.hasNextLine()) {
 			String linha = scan.nextLine();
-			
-			Scanner scanner = new Scanner(linha);
-			
-			scanner.useDelimiter(",");
-			scanner.useLocale(Locale.US);
-			
-			String typeAccount = scanner.next();
-			int agencia = scanner.nextInt();
-			int numero = scanner.nextInt();
-			String nomeTitular = scanner.next();
-			String cpf = scanner.next();
-			String profissao = scanner.next();
-			double saldo = scanner.nextDouble();
-			
-			Conta cc = instanceOfAccount(typeAccount, agencia, numero);
-			scanner.close();
+			Conta cc = scan(linha);
 			if(equalAccount(c, cc)) {
-				cc.setTitular(new Cliente(nomeTitular, cpf, profissao));
-				cc.deposita(saldo);
 				scan.close();
 				return cc;
 			}
@@ -128,11 +112,13 @@ public class BancoDAO {
 		}
 		return false;
 	}
-	
+//	Um padrão de projeto é uma solução elegante para um problema que é recorrente no dia-a-dia do desenvolvedor.
+//	Ou seja, por mais que desenvolvamos projetos diferentes, muitos dos problemas se repetem. 
+//	Padrões de projeto são soluções elegantes e flexíveis para esses problemas.
+
+//	Design Patterns:
+//		Chain of Responsability
 	private Conta instanceOfAccount(String typeAccount, int agencia, int numero) {
-		if(typeAccount.equalsIgnoreCase("CC"))
-			return new ContaCorrente(agencia, numero);
-	
-		return new ContaPoupanca(agencia, numero);
+		return new Instanciador().instaciar(typeAccount, agencia, numero);
 	}
 }

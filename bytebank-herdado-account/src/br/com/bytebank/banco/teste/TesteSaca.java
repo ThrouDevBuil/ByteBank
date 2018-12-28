@@ -42,16 +42,16 @@ public class TesteSaca {
 		Cliente cli3 = new Cliente("Bruno", "3424535464", "Programador");
 		cc2.setTitular(cli3);
 		
-		List<? extends Conta> contas = Arrays.asList(cc, cp, cc2);
+		List<? extends Conta> contas; //= Arrays.asList(cc, cp, cc2);
 //		contas.addAll(Arrays.asList(cc, cp, cc2));
-		System.out.println(contas);
 		BancoDAO dao = new BancoDAO();
-		
+		contas = dao.getContas();
+		//System.out.println(contas);
 //		Conta cc = dao.getConta(new ContaCorrente(123, 432));
 //		
 //		if(cc != null)
 //			System.out.println(cc);
-		dao.setContas(contas);
+		dao.setContas(contas);//
 //		
 //		
 	}

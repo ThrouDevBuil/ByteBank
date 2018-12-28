@@ -9,7 +9,7 @@ public class ContaCorrente extends Conta implements Tributavel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	public ContaCorrente(int agencia, int numero) {
 		super(agencia, numero);
 	}
@@ -35,12 +35,12 @@ public class ContaCorrente extends Conta implements Tributavel {
 	}
 	
 	@Override
+	public String typeAccount() throws UnsupportedEncodingException {
+		return new String("CC".getBytes("UTF-8"), "UTF-8");
+	}
+	
+	@Override
 	public String toString() {
 		return super.toString() + "\nTipo da conta: Conta Corrente\n";
-	}
-
-	@Override
-	public String typeAccount() throws UnsupportedEncodingException {
-		return new String("CC".getBytes(), "UTF-8");
 	}
 }

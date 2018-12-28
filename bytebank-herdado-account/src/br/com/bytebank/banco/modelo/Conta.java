@@ -74,6 +74,7 @@ public abstract class Conta implements Comparable<Conta>, java.io.Serializable {
     private int numero;
     private transient Cliente titular;
     private static int total = 0;
+    
     //             Default:
     //<<package private>> (visível na classe e em qualquer outro membro do mesmo pacote, 
     //podendo ser chamado de default)
@@ -167,6 +168,8 @@ public abstract class Conta implements Comparable<Conta>, java.io.Serializable {
     public static int getTotal(){
         return Conta.total;
     }
+    
+	public abstract String typeAccount() throws UnsupportedEncodingException;
 
     @Override
     public String toString() {
@@ -182,9 +185,7 @@ public abstract class Conta implements Comparable<Conta>, java.io.Serializable {
     @Override
     public int compareTo(Conta c) {
     	return Double.compare(this.saldo, c.saldo);
-    }	
-    
-    public abstract String typeAccount() throws UnsupportedEncodingException;
+    }
     
     @Override
     public boolean equals(Object o) {
