@@ -41,5 +41,6 @@ public interface Instace {
 	
 	//Chain of Responsibility
 	Conta instance(String typeAccount, int agencia, int numero);
+	
 	void setProximo(Instace proximo);
 }

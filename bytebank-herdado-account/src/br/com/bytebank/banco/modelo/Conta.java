@@ -94,6 +94,11 @@ public abstract class Conta implements Comparable<Conta>, java.io.Serializable {
         this.numero = numero;
     }
 
+    /**
+     * 
+     * @param valor
+     * @throws SaldoInsuficienteException
+     */
     public abstract void deposita(double valor) throws SaldoInsuficienteException;
     
     /**
@@ -188,12 +193,12 @@ public abstract class Conta implements Comparable<Conta>, java.io.Serializable {
     }
     
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o) throws NullPointerException, IllegalStateException {
     	if(o == null)
     		throw new NullPointerException("Conta não foi cadastrada!");
     	
     	if(!(o instanceof Conta))
-    		return false;
+    		throw new IllegalStateException("O objeto cadastrado não é uma conta!");
     	
     	Conta c = (Conta)o;
     	return ((Integer.compare(this.numero, c.numero) == 0) && Integer.compare(this.agencia, c.agencia) == 0);

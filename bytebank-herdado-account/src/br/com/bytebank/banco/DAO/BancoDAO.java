@@ -7,7 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -27,10 +30,21 @@ public class BancoDAO {
 	}
 	
 	public void setConta(Conta conta) throws IOException {
+		if(conta == null)
+			throw new NullPointerException("Conta inexistente!!");
 		writeFile(conta);
 	}
 	
-	private void writeFile(Conta conta) throws UnsupportedEncodingException, FileNotFoundException {
+	/**
+	 * 
+	 * @param conta
+	 * @throws UnsupportedEncodingException
+	 * @throws FileNotFoundException
+	 * @throws NullPointerException
+	 */
+	private void writeFile(Conta conta) throws UnsupportedEncodingException, FileNotFoundException, NullPointerException {
+		if(conta == null)
+			throw new NullPointerException("Conta não existe!");
 		PrintStream ps = new PrintStream(new FileOutputStream(new File("bytebank.csv"), true), true, "UTF-8");
 		
 		ps.println(String.format(new Locale("pt", "BR"), "%s,%04d,%04d,%s,%s,%s,%08.2f",
@@ -42,7 +56,7 @@ public class BancoDAO {
 	
 	public void setContas(List<? extends Conta> contas) throws IOException {
 		for(Conta conta : contas)
-			writeFile(conta);
+			setConta(conta);
 	}
 	
 	public Conta scan(String linha) {
@@ -69,7 +83,7 @@ public class BancoDAO {
 	
 	public List<? extends Conta> getContas() throws IOException {
 		
-		Scanner scan = new Scanner(new FileInputStream(new File("bytebank.csv")));
+		Scanner scan = new Scanner(Files.newInputStream(Paths.get("bytebank.csv")));
 		
 		while(scan.hasNextLine()) {
 			String linha = scan.nextLine();
@@ -78,7 +92,7 @@ public class BancoDAO {
 				contas.add(cc);
 		}
 		scan.close();
-		return (ArrayList<? extends Conta>) contas;
+		return (ArrayList<? extends Conta>) Collections.unmodifiableList(contas);
 	}
 	
 	public Conta getConta(Conta c) throws IOException {
