@@ -23,7 +23,7 @@ public class TesteTributaveis {
 		//Após importar um pacote não há necessidade
 		//de utilizar o qualificador para instanciar um objeto.
 		//Um pacote pode conter nenhum ou mais subpacotes e/ou classes dentro dele.
-		//Simple Name 
+		//Simple Name
 		ContaCorrente cc = new ContaCorrente(222, 333);
 		cc.deposita(100.0);
 		

@@ -1,6 +1,7 @@
 package br.com.bytebank.banco.modelo;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 
 public class ContaPoupanca extends Conta {
 
@@ -8,6 +9,10 @@ public class ContaPoupanca extends Conta {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public ContaPoupanca(int agencia, int numero, double saldo) {
+		super(agencia, numero, saldo);
+	}
+	
 	public ContaPoupanca(int agencia, int numero) {
 		super(agencia, numero);
 	}

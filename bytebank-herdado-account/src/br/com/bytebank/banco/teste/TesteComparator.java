@@ -16,25 +16,25 @@ public class TesteComparator {
 
 	public static void main(String[] args) {
 		
-		Conta cc1 = new ContaCorrente(22, 33);
+		Conta cc1 = new ContaCorrente(22, 33-02);
         Cliente clienteCC1 = new Cliente();
         clienteCC1.setNome("Nico");
         cc1.setTitular(clienteCC1);
         cc1.deposita(333.0);
 
-        Conta cc2 = new ContaPoupanca(22, 44);
+        Conta cc2 = new ContaPoupanca(22, 44-01);
         Cliente clienteCC2 = new Cliente();
         clienteCC2.setNome("Guilherme");
         cc2.setTitular(clienteCC2);
         cc2.deposita(444.0);
 
-        Conta cc3 = new ContaCorrente(22, 11);
+        Conta cc3 = new ContaCorrente(22, 11-12);
         Cliente clienteCC3 = new Cliente();
         clienteCC3.setNome("Paulo");
         cc3.setTitular(clienteCC3);
         cc3.deposita(111.0);
 
-        Conta cc4 = new ContaPoupanca(22, 22);
+        Conta cc4 = new ContaPoupanca(22, 22-02);
         Cliente clienteCC4 = new Cliente();
         clienteCC4.setNome("Ana");
         cc4.setTitular(clienteCC4);
@@ -109,7 +109,7 @@ public class TesteComparator {
         //O corpo não precisa ser definido com chaves nem precisa utilizar o return 
         //quando só existe uma instrução para ser executada
         //Dois argumentos do tipo conta
-        lista.sort( (c1, c2) -> Integer.compare(c1.getNumero(), c2.getNumero()) );//Corpo
+//        lista.sort( (c1, c2) -> Integer.compare(c1.getNumero(), c2.getNumero()) );//Corpo
         
         //Uma interface funcional tem apenas um método abstrato.
         //Um método abstrato que também for um método público na classe Object não será contado como esse método.

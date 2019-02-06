@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -19,22 +20,18 @@ import br.com.bytebank.banco.modelo.Cliente;
 import br.com.bytebank.banco.modelo.Conta;
 
 public class BancoDAO {
-	private List<Conta> contas;
+	private List<Conta> contas = new ArrayList<>();
 //	Os arquivos Comma-separated values, também conhecido como CSV, são arquivos de texto 
 //	de formato regulamentado pelo RFC 4180, que faz uma ordenação de bytes ou um formato de 
 //	terminador de linha, separando valores com vírgulas.[1] Ele comumente é usado em softwares offices, 
 //	tais como o Microsoft Excel e o LibreOffice Calc.[2][3]
-	
-	public BancoDAO() {
-		contas = new ArrayList<>();
-	}
-	
+
 	public void setConta(Conta conta) throws IOException {
-		if(conta == null)
-			throw new NullPointerException("Conta inexistente!!");
+		if (conta == null)
+			throw new NullPointerException("Conta não existe!");
 		writeFile(conta);
 	}
-	
+
 	/**
 	 * 
 	 * @param conta
@@ -42,29 +39,26 @@ public class BancoDAO {
 	 * @throws FileNotFoundException
 	 * @throws NullPointerException
 	 */
-	private void writeFile(Conta conta) throws UnsupportedEncodingException, FileNotFoundException, NullPointerException {
-		if(conta == null)
-			throw new NullPointerException("Conta não existe!");
+	private void writeFile(Conta conta)
+			throws UnsupportedEncodingException, FileNotFoundException, NullPointerException {
 		PrintStream ps = new PrintStream(new FileOutputStream(new File("bytebank.csv"), true), true, "UTF-8");
-		
-		ps.println(String.format(new Locale("pt", "BR"), "%s,%04d,%04d,%s,%s,%s,%08.2f",
-				conta.typeAccount(), conta.getAgencia(), conta.getNumero(), 
-				conta.getTitular().getNome(), conta.getTitular().getCpf(), conta.getTitular().getProfissao(),
-				conta.getSaldo()));
+		ps.println(String.format(new Locale("pt", "BR"), "%s,%04d,%04d,%s,%s,%s,%08.2f", conta.typeAccount(),
+				conta.getAgencia(), conta.getNumero(), conta.getTitular().getNome(), conta.getTitular().getCpf(),
+				conta.getTitular().getProfissao(), conta.getSaldo()));
 		ps.close();
 	}
-	
+
 	public void setContas(List<? extends Conta> contas) throws IOException {
-		for(Conta conta : contas)
+		for (Conta conta : contas)
 			setConta(conta);
 	}
-	
+
 	public Conta scan(String linha) {
 		Scanner scanner = new Scanner(linha);
-		
+
 		scanner.useDelimiter(",");
 		scanner.useLocale(Locale.US);
-		
+
 		String typeAccount = scanner.next();
 		int agencia = scanner.nextInt();
 		int numero = scanner.nextInt();
@@ -72,37 +66,37 @@ public class BancoDAO {
 		String cpf = scanner.next();
 		String profissao = scanner.next();
 		double saldo = scanner.nextDouble();
-		
-		Conta cc = instanceOfAccount(typeAccount, agencia, numero);
+
+		Conta cc = instanceOfAccount(typeAccount, agencia, numero, BigDecimal.valueOf(saldo));
 		cc.setTitular(new Cliente(nomeTitular, cpf, profissao));
 		cc.deposita(saldo);
-		
+
 		scanner.close();
 		return cc;
 	}
-	
+
 	public List<? extends Conta> getContas() throws IOException {
-		
+
 		Scanner scan = new Scanner(Files.newInputStream(Paths.get("bytebank.csv")));
-		
-		while(scan.hasNextLine()) {
+
+		while (scan.hasNextLine()) {
 			String linha = scan.nextLine();
 			Conta cc = scan(linha);
-			if(!compareAccount(cc))
+			if (!compareAccount(cc))
 				contas.add(cc);
 		}
 		scan.close();
 		return (ArrayList<? extends Conta>) Collections.unmodifiableList(contas);
 	}
-	
+
 	public Conta getConta(Conta c) throws IOException {
 		
 		Scanner scan = new Scanner(new FileInputStream(new File("bytebank.csv")));
-		
-		while(scan.hasNextLine()) {
+
+		while (scan.hasNextLine()) {
 			String linha = scan.nextLine();
 			Conta cc = scan(linha);
-			if(equalAccount(c, cc)) {
+			if (equalAccount(c, cc)) {
 				scan.close();
 				return cc;
 			}
@@ -110,17 +104,17 @@ public class BancoDAO {
 		scan.close();
 		return null;
 	}
-	
+
 	private boolean equalAccount(Conta c1, Conta c2) {
 		return c1.equals(c2);
 	}
 
 	private boolean compareAccount(Conta conta) {
-		if(contas.size() >= 1) {
-			
-			for(Conta account : contas) {
-				
-				if(account.equals(conta)) 
+		if (contas.size() >= 1) {
+
+			for (Conta account : contas) {
+
+				if (account.equals(conta))
 					return true;
 			}
 		}
@@ -132,7 +126,7 @@ public class BancoDAO {
 
 //	Design Patterns:
 //		Chain of Responsability
-	private Conta instanceOfAccount(String typeAccount, int agencia, int numero) {
-		return new Instanciador().instaciar(typeAccount, agencia, numero);
+	private Conta instanceOfAccount(String typeAccount, int agencia, int numero, BigDecimal saldo) {
+		return new Instanciador().instaciar(typeAccount, agencia, numero, saldo);
 	}
 }

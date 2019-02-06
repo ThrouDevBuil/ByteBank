@@ -10,6 +10,10 @@ public class ContaCorrente extends Conta implements Tributavel {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	public ContaCorrente(int agencia, int numero, double saldo) {
+		super(agencia, numero, saldo);
+	}
+	
 	public ContaCorrente(int agencia, int numero) {
 		super(agencia, numero);
 	}

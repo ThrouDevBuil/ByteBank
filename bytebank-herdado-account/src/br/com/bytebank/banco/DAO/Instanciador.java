@@ -1,5 +1,7 @@
 package br.com.bytebank.banco.DAO;
 
+import java.math.BigDecimal;
+
 import br.com.bytebank.banco.modelo.Conta;
 
 public class Instanciador {
@@ -14,9 +16,9 @@ public class Instanciador {
 		notExists = new NotExists();
 	}
 	
-	public Conta instaciar(String typeAccount, int agencia, int numero) {
+	public Conta instaciar(String typeAccount, int agencia, int numero, BigDecimal saldo) {
 		contaCorrente.setProximo(contaPoupanca);
 		contaPoupanca.setProximo(notExists);
-		return contaCorrente.instance(typeAccount, agencia, numero);
+		return contaCorrente.instance(typeAccount, agencia, numero, saldo);
 	}
 }

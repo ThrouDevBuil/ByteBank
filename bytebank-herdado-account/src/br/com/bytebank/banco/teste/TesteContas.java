@@ -26,5 +26,4 @@ public class TesteContas {
 		System.out.println("CP: " + cp.getSaldo());
 
 	}
-
 }

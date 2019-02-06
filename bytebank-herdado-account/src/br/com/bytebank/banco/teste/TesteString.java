@@ -11,7 +11,7 @@ public class TesteString {
 		//Objetos da classe String são imutáveis, pois não pode ser modificado após a sua inicialização.
 		System.out.println(nome);
 		//Retira todos os caracteres de "espaço"
-		//da string
+		//da string di início ou do fim
 		nome = nome.trim();
 		//Qualquer método da classe String devolve uma nova String que representa
 		//a alteração.

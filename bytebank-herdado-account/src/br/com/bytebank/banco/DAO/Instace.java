@@ -1,5 +1,7 @@
 package br.com.bytebank.banco.DAO;
 
+import java.math.BigDecimal;
+
 import br.com.bytebank.banco.modelo.Conta;
 
 public interface Instace {
@@ -40,7 +42,7 @@ public interface Instace {
 	
 	
 	//Chain of Responsibility
-	Conta instance(String typeAccount, int agencia, int numero);
+	Conta instance(String typeAccount, int agencia, int numero, BigDecimal saldo);
 	
 	void setProximo(Instace proximo);
 }
